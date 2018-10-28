@@ -8,6 +8,13 @@
 
 import UIKit
 
+
+class CustomNavigationControlelr: UINavigationController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,6 +23,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        window = UIWindow()
+        window?.makeKeyAndVisible()
+        
+        let companiesController = ViewController()
+//        dummyViewController.view.backgroundColor = .blue
+        let navController = CustomNavigationControlelr(rootViewController: companiesController)
+        
+        window?.rootViewController = navController
+        
         return true
     }
 
