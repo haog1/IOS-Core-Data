@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreData
+
 
 class CompaniesContoller: UITableViewController, CreateCompanyControllerDelegate {
 
@@ -16,21 +18,38 @@ class CompaniesContoller: UITableViewController, CreateCompanyControllerDelegate
         tableView.insertRows(at: [newIndexPath], with: .automatic)
     }
     
-    var companies = [
-        Company(name: "Apple", founded: Date()),
-        Company(name: "Google", founded: Date()),
-        Company(name: "Facebook", founded: Date())
-    ]
+    var companies = [Company]()
 
     func addCompany(company: Company) {
         companies.append(company)
         let newIndexPath = IndexPath(row: companies.count - 1, section: 0)
         tableView.insertRows(at: [newIndexPath], with: .automatic)
     }
+    
+    private func fetchCompanies() {
+        
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+
+        let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
+        
+        do {
+            let companies = try context.fetch(fetchRequest)
+            companies.forEach { (company) in
+                print(company.name ?? "")
+            }
+            
+            self.companies = companies
+            self.tableView.reloadData()
+            
+        } catch let fetchErr {
+            print("Failed to fetch companies: ", fetchErr)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchCompanies()
         
 //        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Test", style: .plain, target: self, action: #selector(addCompany))
         
